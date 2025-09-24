@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Search Results - AWS EMS</title>
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #232F3E 0%, #FF9900 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .employee-card {
+            border: 2px solid #232F3E;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #f9f9f9;
+        }
+        .employee-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .employee-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid #FF9900;
+            margin-right: 20px;
+            float: left;
+        }
+        .employee-details {
+            overflow: hidden;
+        }
+        .employee-details p {
+            margin: 5px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            background: #232F3E;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #FF9900;
+            color: #232F3E;
+        }
+        .button-group {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Employee Search Results</h1>
+            <p>Found {{ output|length }} employee(s)</p>
+        </div>
+
+        {% for employee in output %}
+        <div class="employee-card">
+            {% if employee[5] %}  <!-- image_url -->
+            <img src="{{ employee[5] }}" alt="{{ employee[1] }} {{ employee[2] }}" class="employee-image" 
+                 onerror="this.style.display='none'">
+            {% endif %}
+            
+            <div class="employee-details">
+                <p><strong>Employee ID:</strong> {{ employee[0] }}</p>
+                <p><strong>Name:</strong> {{ employee[1] }} {{ employee[2] }}</p>
+                <p><strong>Skills:</strong> {{ employee[3] or 'Not specified' }}</p>
+                <p><strong>Location:</strong> {{ employee[4] or 'Not specified' }}</p>
+                {% if employee[5] %}
+                <p><strong>Image URL:</strong> <a href="{{ employee[5] }}" target="_blank">View Image</a></p>
+                {% endif %}
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+        {% endfor %}
+
+        <div class="button-group">
+            <a href="/getemp" class="btn">🔍 New Search</a>
+            <a href="/listemp" class="btn">📋 View All Employees</a>
+            <a href="/dashboard" class="btn">🏠 Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

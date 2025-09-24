@@ -1,0 +1,12 @@
+# config.py.example - Template for configuration
+# Copy this to config.py and fill in your actual values
+
+# AWS RDS Configuration
+host = "your-rds-endpoint.rds.amazonaws.com"
+user = "your-db-username"
+password = "your-db-password"
+db = "employee"
+
+# AWS S3 Configuration
+bucket = "your-s3-bucket-name"
+region = "eu-north-1"

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HRMS Employee Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #232F3E 0%, #FF9900 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .status-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .action-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .btn {
+            display: block;
+            padding: 12px 20px;
+            margin: 10px 0;
+            background: #232F3E;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background: #FF9900;
+            color: #232F3E;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 HRMS Employee Management System</h1>
+            <p>Created  by NITISH SWAMY</p>
+        </div>
+
+        <div class="status-grid">
+            <div class="status-card">
+                <h3>Amazon RDS Database</h3>
+                <p style="font-size: 24px; color: {{ 'green' if aws_status.rds else 'red' }};">
+                    {{ '✅ Connected' if aws_status.rds else '❌ Disconnected' }}
+                </p>
+            </div>
+            
+            <div class="status-card">
+                <h3>Amazon S3 Storage</h3>
+                <p style="font-size: 24px; color: {{ 'green' if aws_status.s3 else 'red' }};">
+                    {{ '✅ Connected' if aws_status.s3 else '❌ Disconnected' }}
+                </p>
+            </div>
+        </div>
+
+        <div class="actions-grid">
+            <div class="action-card">
+                <h3>➕ Add Employee</h3>
+                <a href="/addemp" class="btn">Add Employee</a>
+            </div>
+            
+            <div class="action-card">
+                <h3>🔍 Search Employees</h3>
+                <a href="/getemp" class="btn">Search</a>
+            </div>
+            
+            <div class="action-card">
+                <h3>📋 List All Employees</h3>
+                <a href="/listemp" class="btn">View All</a>
+            </div>
+            
+            <div class="action-card">
+                <h3>🔧 AWS Status</h3>
+                <a href="/aws-status" class="btn">AWS Status</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

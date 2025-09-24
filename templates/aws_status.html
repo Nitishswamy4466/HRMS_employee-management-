@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AWS Status - Employee Management System</title>
+    <style>
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #232F3E 0%, #FF9900 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .status-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 5px solid;
+        }
+        .status-healthy {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+        .status-unhealthy {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            background: #232F3E;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background: #FF9900;
+            color: #232F3E;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 AWS Services Status</h1>
+        
+        <div class="status-item {{ 'status-healthy' if aws_status.rds else 'status-unhealthy' }}">
+            <h3>Amazon RDS Database</h3>
+            <p>Status: <strong>{{ 'Connected' if aws_status.rds else 'Disconnected' }}</strong></p>
+            <p>Endpoint: {{ host }}</p>
+        </div>
+
+        <div class="status-item {{ 'status-healthy' if aws_status.s3 else 'status-unhealthy' }}">
+            <h3>Amazon S3 Storage</h3>
+            <p>Status: <strong>{{ 'Connected' if aws_status.s3 else 'Disconnected' }}</strong></p>
+            <p>Bucket: {{ bucket }}</p>
+            <p>Region: {{ region }}</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/dashboard" class="btn">🏠 Back to Dashboard</a>
+            <a href="/health" class="btn" target="_blank">📊 API Health Check</a>
+        </div>
+    </div>
+</body>
+</html>

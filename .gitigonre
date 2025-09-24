@@ -1,0 +1,15 @@
+# Create .gitignore to exclude unnecessary files
+echo ".venv/" > .gitignore
+echo "__pycache__/" >> .gitignore
+echo "*.pyc" >> .gitignore
+echo "*.pyo" >> .gitignore
+echo "*.pyd" >> .gitignore
+echo ".env" >> .gitignore
+echo ".vscode/" >> .gitignore
+echo ".idea/" >> .gitignore
+echo ".DS_Store" >> .gitignore
+echo "Thumbs.db" >> .gitignore
+echo "*.log" >> .gitignore
+echo "logs/" >> .gitignore
+echo "test.txt" >> .gitignore
+echo "config.py" >> .gitignore  # Don't commit real credentials!

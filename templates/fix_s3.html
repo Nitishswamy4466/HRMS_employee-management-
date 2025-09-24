@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fix S3 Access - AWS EMS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #232F3E 0%, #FF9900 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .issue-card {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .solution-card {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .code-block {
+            background: #232F3E;
+            color: #FF9900;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #232F3E;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #FF9900;
+            color: #232F3E;
+        }
+        .step {
+            margin: 15px 0;
+            padding: 10px;
+            border-left: 4px solid #FF9900;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Fix AWS S3 Access Issues</h1>
+            <p>AWS Employee Management System</p>
+        </div>
+
+        <div class="issue-card">
+            <h2>🚨 Current Issue</h2>
+            <p><strong>S3 Bucket:</strong> {{ bucket }}</p>
+            <p><strong>Region:</strong> {{ region }}</p>
+            <p><strong>Status:</strong> 
+                {% if aws_status.s3_access_denied %}
+                    ❌ Access Denied - Need AWS Permissions
+                {% else %}
+                    ❌ Bucket Not Accessible
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="solution-card">
+            <h2>✅ Solution 1: Configure AWS Credentials</h2>
+            
+            <div class="step">
+                <h3>1. Check Current AWS Configuration</h3>
+                <p>Run this command in your terminal:</p>
+                <div class="code-block">
+aws configure list
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>2. Configure AWS Credentials</h3>
+                <p>Run this command and enter your credentials:</p>
+                <div class="code-block">
+aws configure
+                </div>
+                <p>You'll be prompted for:</p>
+                <ul>
+                    <li>AWS Access Key ID</li>
+                    <li>AWS Secret Access Key</li>
+                    <li>Default region: <strong>eu-north-1</strong></li>
+                    <li>Default output format: <strong>json</strong></li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3>3. Set Environment Variables (Alternative)</h3>
+                <p>Or set these environment variables:</p>
+                <div class="code-block">
+# Windows Command Prompt
+set AWS_ACCESS_KEY_ID=YOUR_ACCESS_KEY
+set AWS_SECRET_ACCESS_KEY=YOUR_SECRET_KEY
+set AWS_DEFAULT_REGION=eu-north-1
+
+# Windows PowerShell
+$env:AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY"
+$env:AWS_SECRET_ACCESS_KEY="YOUR_SECRET_KEY"
+$env:AWS_DEFAULT_REGION="eu-north-1"
+
+# Linux/Mac
+export AWS_ACCESS_KEY_ID=YOUR_ACCESS_KEY
+export AWS_SECRET_ACCESS_KEY=YOUR_SECRET_KEY
+export AWS_DEFAULT_REGION=eu-north-1
+                </div>
+            </div>
+        </div>
+
+        <div class="solution-card">
+            <h2>✅ Solution 2: Fix S3 Bucket Permissions</h2>
+            
+            <div class="step">
+                <h3>1. Test S3 Access</h3>
+                <p>Check if you can access the bucket:</p>
+                <div class="code-block">
+aws s3 ls s3://{{ bucket }}/
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>2. Fix Bucket Permissions</h3>
+                <p>Run these commands to fix permissions:</p>
+                <div class="code-block">
+# Enable public access
+aws s3api put-public-access-block \
+    --bucket {{ bucket }} \
+    --public-access-block-configuration BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false
+
+# Set bucket policy
+aws s3api put-bucket-policy --bucket {{ bucket }} --policy '{
+    "Version": "2012-10-17",
+    "Statement": [{
+        "Effect": "Allow",
+        "Principal": "*",
+        "Action": [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:PutObjectAcl"
+        ],
+        "Resource": "arn:aws:s3:::{{ bucket }}/*"
+    }]
+}'
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>3. Try Automatic Fix</h3>
+                <p>Click the button below to attempt automatic permission fix:</p>
+                <a href="/fix-permissions" class="btn" target="_blank">🔧 Fix Permissions Automatically</a>
+            </div>
+        </div>
+
+        <div class="solution-card">
+            <h2>✅ Solution 3: IAM Policy Requirements</h2>
+            <p>Your AWS user needs these permissions:</p>
+            <div class="code-block">
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject",
+                "s3:ListBucket",
+                "s3:PutObjectAcl",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": [
+                "arn:aws:s3:::{{ bucket }}",
+                "arn:aws:s3:::{{ bucket }}/*"
+            ]
+        }
+    ]
+}
+            </div>
+        </div>
+
+        <div class="solution-card">
+            <h2>🔍 Debug Information</h2>
+            <div class="code-block">
+# Test AWS configuration
+aws sts get-caller-identity
+
+# Test S3 access
+aws s3api head-bucket --bucket {{ bucket }}
+
+# List buckets you have access to
+aws s3 ls
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/dashboard" class="btn">🏠 Back to Dashboard</a>
+            <a href="/aws-status" class="btn">🔄 Check AWS Status</a>
+            <a href="/health" class="btn" target="_blank">📊 API Health Check</a>
+        </div>
+    </div>
+</body>
+</html>
